@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 
+html,body{
+  overflow-x: hidden;
+}
 @layer utilities {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
