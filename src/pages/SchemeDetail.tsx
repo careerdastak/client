@@ -10,7 +10,7 @@ import { ArrowLeft, ExternalLink, Users, Building2, GraduationCap, Heart, Gift, 
 import ShareButton from "@/components/ShareButton";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 // Icon mapping
 const iconMap = {

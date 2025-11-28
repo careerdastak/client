@@ -8,7 +8,7 @@ import { Gift, ArrowRight, Users, Building2, GraduationCap, Heart, AlertCircle }
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 // Icon mapping for schemes
 const iconMap = {
