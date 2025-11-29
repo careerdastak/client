@@ -622,6 +622,12 @@ useEffect(() => {
               </Card>
             </div>
 
+            <div className="block lg:hidden">
+              <div className="w-full max-w-sm md:max-w-md"> 
+                <Schemes />
+              </div>
+            </div>
+
             {/* Documents services & Latest news/blogs */}
             <div className="space-y-5 mt-2">
               <DocumentsServices />
@@ -630,8 +636,11 @@ useEffect(() => {
           </div>
 
           {/* Right Sidebar */}
-          <aside className="space-y-5">
-            <Schemes />
+          <aside className="space-y-5 md:max-w-md">
+            <div className="hidden lg:block">
+              <Schemes />
+            </div>
+            
             <QuickLinks />
             <LatestUpdates />
 
