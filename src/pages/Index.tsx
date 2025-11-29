@@ -251,37 +251,40 @@ const Index = () => {
     fetchAnswerKeys();
   }, []);
 
-  // Fetch Syllabus
-  useEffect(() => {
-    const fetchSyllabus = async () => {
-      try {
-        setLoadingSyllabus(true);
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/syllabus/home`);
-        
-        if (!res.ok) throw new Error("Failed to fetch syllabus");
-        const data = await res.json();
+ // Fetch Syllabus
+useEffect(() => {
+  const fetchSyllabus = async () => {
+    try {
+      setLoadingSyllabus(true);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/syllabus/home`);
+      if (!res.ok) throw new Error("Failed to fetch syllabus");
+      const data = await res.json();
 
-        // Handle both response formats
-        const syllabusData = data.data || data;
-        
-        if (Array.isArray(syllabusData)) {
-          // Sort by creation date and take latest 3
-          const sortedSyllabus = syllabusData
-            .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-            .slice(0, 3);
-          setSyllabus(sortedSyllabus);
-        } else {
-          setSyllabus([]);
-        }
-      } catch (err: any) {
-        setErrorSyllabus(err?.message ?? String(err));
-      } finally {
-        setLoadingSyllabus(false);
+      const syllabusData = data.data || data;
+
+      if (Array.isArray(syllabusData)) {
+        // Sort by creation date descending (latest first)
+        const sortedSyllabus = syllabusData
+          .sort((a: any, b: any) => {
+            const dateA = new Date(a.createdAt || 0).getTime();
+            const dateB = new Date(b.createdAt || 0).getTime();
+            return dateB - dateA; // descending order
+          })
+          .slice(0, 15); // take top 15 latest
+        setSyllabus(sortedSyllabus);
+      } else {
+        setSyllabus([]);
       }
-    };
+    } catch (err: any) {
+      setErrorSyllabus(err?.message ?? String(err));
+    } finally {
+      setLoadingSyllabus(false);
+    }
+  };
 
-    fetchSyllabus();
-  }, []);
+  fetchSyllabus();
+}, []);
+
 
   // Important Documents static data
   const importantDocuments = [
@@ -489,12 +492,12 @@ const Index = () => {
                             <div>{a.organization}</div>
                             <div>
                               <span className="text-xs text-blue-700 font-bold">
-                              Start: {a.importantDates?.applicationStart ? formatDate(a.importantDates.applicationStart) + " " : "-"}
-                            </span>
-                            <span className="mx-2">|</span>
-                            <span className="text-xs text-red-600 font-bold">
-                              Last: {a.importantDates?.applicationEnd ? formatDate(a.importantDates.applicationEnd) : "-"}
-                            </span>
+                                Start: {a.importantDates?.applicationStart ? formatDate(a.importantDates.applicationStart) + " " : "-"}
+                              </span>
+                              <span className="mx-2">|</span>
+                              <span className="text-xs text-red-600 font-bold">
+                                Last: {a.importantDates?.applicationEnd ? formatDate(a.importantDates.applicationEnd) : "-"}
+                              </span>
                             </div>
                           </div>
 
@@ -572,29 +575,22 @@ const Index = () => {
                       const k = keyFor(syl, idx);
                       return (
                         <div key={k} className="pb-3 border-b last:border-0 border-slate-100 last:pb-0">
-                          <Link 
-                            to={`/syllabus/${syl.slug}`} 
+                          <a
+                            href={syl.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="block text-sm font-medium text-slate-800 hover:text-blue-700 leading-tight mb-1"
                           >
                             {syl.title}
-                          </Link>
+                          </a>
                           <div className="text-xs text-slate-500 space-y-1">
                             {syl.organization && (
                               <div className="font-medium">{syl.organization}</div>
                             )}
-                            {syl.description && (
-                              <div className="line-clamp-1">{syl.description}</div>
-                            )}
-                            {syl.subjects && syl.subjects.length > 0 && (
-                              <div className="text-blue-700 font-semibold">
-                                Subjects: {syl.subjects.slice(0, 2).join(", ")}
-                                {syl.subjects.length > 2 && "..."}
-                              </div>
-                            )}
                           </div>
                         </div>
                       );
-                    })
+                    }).reverse()
                   )}
                 </CardContent>
               </Card>
