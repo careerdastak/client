@@ -167,12 +167,6 @@ const Admission = () => {
                 <Card key={admission._id} className="shadow-card hover:shadow-lg transition-shadow">
                   <CardContent className="p-4 md:p-6">
                     <div className="flex flex-col sm:flex-row gap-4">
-                      {/* Icon */}
-                      <div className="shrink-0 flex justify-center sm:justify-start">
-                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <GraduationCap className="h-6 w-6 text-primary" />
-                        </div>
-                      </div>
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
